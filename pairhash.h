@@ -25,7 +25,7 @@ struct pair_hash {
   std::size_t operator () (const std::pair<int, int> &p) const {
     long long l;
     memcpy(&l, &p.first, 4);
-    memcpy((void*)&l +4, &p.second, 4);
+    memcpy((char*)&l +4, &p.second, 4);
     return std::hash<long long>()(l);
   }
 };
