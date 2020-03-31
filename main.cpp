@@ -15,6 +15,7 @@
 
 #include "segtree.h"
 #include "pairhash.h"
+#include "kmp.h"
 using namespace std;
 
 struct ScopedNanoTimer
@@ -43,8 +44,10 @@ typedef unsigned long long ulint;
 
 
 
+
+
 // Complete the insertionSort function below.
-lint insertionSort(vector<int> &q) {
+lint insertionSort(const vector<int> &q) {
 
     map<int, int> cnt;
 
@@ -78,6 +81,9 @@ int main()
     ios_base::sync_with_stdio(0);
     cin.tie(NULL);
     cout.tie(NULL);
+
+    palindromeCreation("abc");
+    kmpFunc("aasasaaa");
 
     {
         ScopedNanoTimer t("  ");
