@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <sstream>
 #include <utility>
 #include <algorithm>
 #include <vector>
@@ -16,6 +17,7 @@
 #include "segtree.h"
 #include "pairhash.h"
 #include "kmp.h"
+#include "leetcode_bintree.h"
 using namespace std;
 
 struct ScopedNanoTimer
@@ -42,50 +44,6 @@ using namespace std;
 typedef long long lint;
 typedef unsigned long long ulint;
 
-struct ListNode {
-    int val;
-    ListNode *next;
-    ListNode(int x) : val(x), next(NULL) {}
-};
-
-
-
-struct TreeNode {
-    int val;
-    TreeNode *left;
-    TreeNode *right;
-    TreeNode(int x) : val(x), left(NULL), right(NULL) {}
-};
-
-class Solution {
-public:
-    bool isSubPath(ListNode* head, TreeNode* root, bool tight = false) {
-        vector<int> pat;
-        while(head){
-            pat.push_back(head->val);
-            head = head->next;
-        }
-
-        vector<int> kmp = kmpFunc(pat);
-
-        int n = pat.size();
-        bool ok = 0;
-        function<void(TreeNode* r, int)> dfs = [&](TreeNode* r, int len)
-        {
-            if (len == n) {ok =1; return;}
-            if (!r) return;
-
-            int cur = r->val;
-
-            while(len>0 && cur != pat[len]) len = kmp[len-1];
-            if (cur == pat[len]) len++;
-            dfs(r->left, len);
-            dfs(r->right, len);
-        };
-        dfs(root, 0);
-        return ok;
-    }
-};
 
 int main()
 {
@@ -93,7 +51,6 @@ int main()
     cin.tie(NULL);
     cout.tie(NULL);
 
-    Solution s;
-    kmpFunc(string("asddf"));
+    leetcode_bintree_test();
 
 }
