@@ -43,38 +43,28 @@ typedef long long lint;
 typedef unsigned long long ulint;
 
 
+class Solution {
+public:
+    int maxChunksToSorted(const vector<int>& a) {
+        int n = a.size();
+        SegmentTree<int> seg(n);
 
-
-
-// Complete the insertionSort function below.
-lint insertionSort(const vector<int> &q) {
-
-    map<int, int> cnt;
-
-    for (auto v:q) cnt[v]++;
-
-    auto so = q;
-    sort(so.begin(), so.end());
-
-    SegmentTree<int> tree(q.size(), 0);
-
-
-    lint res=0;
-    int n = q.size();
-    for (int i=n-1; i>=0; i--)
-    {
-        int v = q[i];
-        auto it = lower_bound(so.begin(), so.end(), v);
-        int id = it - so.begin() + (--cnt[v]);
-
-
-        if (id > 0) res += tree.get(0, id-1);
-        tree.set(id, 1);
-
+        vector<pair<int, int>>  ap(n); // value index
+        for (int i=0; i<n; ++i) ap[i] = {a[i], i};
+        sort(ap.begin(), ap.end());
+        int res=0;
+        for (int i=0; i<n; ++i)
+        {
+            pair<int, int> p = ap[i];
+            seg.set(p.second, 1);
+            if (seg.get(0,i) == i+1)res++;
+        }
+        return res;
     }
-    return res;
+};
 
-}
+
+
 
 int main()
 {
@@ -82,15 +72,7 @@ int main()
     cin.tie(NULL);
     cout.tie(NULL);
 
-    palindromeCreation("abc");
-    kmpFunc("aasasaaa");
+    Solution s;
+    s.maxChunksToSorted({0});
 
-    {
-        ScopedNanoTimer t("  ");
-        int n = 1000000;
-        vector<int> a(n);
-        for (int i=0; i<n; ++i) a[i]=rand()%10000000;
-
-        cout<<insertionSort(a);
-    }
 }

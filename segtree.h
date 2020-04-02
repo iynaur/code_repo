@@ -61,10 +61,10 @@ public:
     int i = el - 1 + index;
     tree[i] = value;
 
-    do {
+    while (i > 0) {
       i = (i - 1) / 2;
       tree[i] = f(tree[i * 2 + 1], tree[i * 2 + 2]);
-    } while (i > 0);
+    }
   }
 
 private:
