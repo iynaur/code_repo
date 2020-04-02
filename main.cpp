@@ -42,29 +42,50 @@ using namespace std;
 typedef long long lint;
 typedef unsigned long long ulint;
 
-
-class Solution {
-public:
-    int maxChunksToSorted(const vector<int>& a) {
-        int n = a.size();
-        SegmentTree<int> seg(n);
-
-        vector<pair<int, int>>  ap(n); // value index
-        for (int i=0; i<n; ++i) ap[i] = {a[i], i};
-        sort(ap.begin(), ap.end());
-        int res=0;
-        for (int i=0; i<n; ++i)
-        {
-            pair<int, int> p = ap[i];
-            seg.set(p.second, 1);
-            if (seg.get(0,i) == i+1)res++;
-        }
-        return res;
-    }
+struct ListNode {
+    int val;
+    ListNode *next;
+    ListNode(int x) : val(x), next(NULL) {}
 };
 
 
 
+struct TreeNode {
+    int val;
+    TreeNode *left;
+    TreeNode *right;
+    TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+};
+
+class Solution {
+public:
+    bool isSubPath(ListNode* head, TreeNode* root, bool tight = false) {
+        vector<int> pat;
+        while(head){
+            pat.push_back(head->val);
+            head = head->next;
+        }
+
+        vector<int> kmp = kmpFunc(pat);
+
+        int n = pat.size();
+        bool ok = 0;
+        function<void(TreeNode* r, int)> dfs = [&](TreeNode* r, int len)
+        {
+            if (len == n) {ok =1; return;}
+            if (!r) return;
+
+            int cur = r->val;
+
+            while(len>0 && cur != pat[len]) len = kmp[len-1];
+            if (cur == pat[len]) len++;
+            dfs(r->left, len);
+            dfs(r->right, len);
+        };
+        dfs(root, 0);
+        return ok;
+    }
+};
 
 int main()
 {
@@ -73,6 +94,6 @@ int main()
     cout.tie(NULL);
 
     Solution s;
-    s.maxChunksToSorted({0});
+    kmpFunc(string("asddf"));
 
 }

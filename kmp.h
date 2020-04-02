@@ -13,19 +13,22 @@
 #include <chrono>
 #include <cstring>
 using namespace std;
-vector<int>  kmpFunc(const string &s)
+
+template <typename VT>
+vector<int>  kmpFunc(const VT &s)
 {
-  int n = s.size();
-  vector<int> a(n, 0);// a0=0 a1=1   a(n-1)=n-1;
-  for (int i=1; i<n; ++i)
-  {
-    int candi = a[i-1];
-    while (candi > 0 && s[i] != s[candi]) candi = a[candi-1];
-    if (s[i] == s[candi]) a[i]=candi+1;
-    else a[i]=0;
-  }
-  return a;
+    int n = s.size();
+    vector<int> a(n, 0);// a0=0 a1=1   a(n-1)=n-1;
+    for (int i=1; i<n; ++i)
+    {
+        int candi = a[i-1];
+        while (candi > 0 && s[i] != s[candi]) candi = a[candi-1];
+        if (s[i] == s[candi]) a[i]=candi+1;
+        else a[i]=0;
+    }
+    return a;
 }
+
 
 int palindromeCreation(const string& s) {
   int n = s.size();
