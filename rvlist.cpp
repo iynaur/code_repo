@@ -201,65 +201,35 @@ public:
 };
 
 
-int main()
+int maint()
 {
     ios_base::sync_with_stdio(0);    cin.tie(NULL);    cout.tie(NULL);
 
-    int n,m; cin>>n>>m;
-    vi p(m);
-    for (int &v : p)cin>>v;
+    rvlist l(1);
 
-    rvdeque fo(n);
+    for (int i = 2; i<5; ++i)
+    {
+        rvlist m(i);
+        l.append(m);
+    }
 
-    for (int i =0; i<n; ++i)
-    {
-        fo.set(i, rvlist(i+1));
-    }
-    auto prt = [&]()
-    {
-        return;
-        cout<<"=====\n";
-        for (int i=0; i<fo.size(); ++i)
-        {
-            auto l = fo.at(i);
-            l.print();
-        }
-        cout<<"=====\n";
-    };
+    l.print();
+    l.reverse();
+    l.print();
 
-    for (int i = 0; i<m; ++i)
+    rvlist m(1);
+
+    for (int i = 2; i<5; ++i)
     {
-        //prt();
-        int piv = p[i];
-        fo.foldAt(piv);
+        rvlist n(i);
+        m.append(n);
     }
-    //prt();
-    int maxh = 0;
-    rvlist hi;
-    for (int i = 0; i< fo.size(); ++i)
-    //for (auto l : fo)
-    {
-        auto l = fo.at(i);
-        if (l.len>maxh)
-        {
-            maxh = l.len;
-            hi = l;
-        }
-    }
-    hi.print();
-    for (int i = 0; i< fo.size(); ++i)
-    //for (auto l : fo)
-    {
-        auto l = fo.at(i);
-        cout<<l.start.first->a<<" ";
-    }
-    cout<<endl;
-    for (int i = 0; i< fo.size(); ++i)
-    {
-        auto l = fo.at(i);
-        cout<<l.end.first->a<<" ";
-    }
-    cout<<endl;
+    m.print();
+
+    l.reverseAppend(m);
+    l.print();
+    l.reverse();
+    l.print();
 
 
 }

@@ -30,7 +30,7 @@ vector<int>  kmpFunc(const VT &s)
 }
 
 
-int palindromeCreation(const string& s) {
+inline int palindromeCreation(const string& s) {
   int n = s.size();
   auto rs = s;
   reverse(rs.begin(), rs.end());

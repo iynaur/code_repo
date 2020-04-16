@@ -75,7 +75,7 @@ private:
   std::function<T(T, T)> f;
 
   T query(int l, int r, int st, int fi, int node) {
-      if (l==st && r==fi-1)
+      if (l<=st && r>=fi-1)
       {
            return tree[node];
       }
