@@ -42,7 +42,7 @@ lint rev(lint a){
   return pow(a, mod-2);
 }
 
-lint comb(lint n, lint m, vl la, vl rela){
+lint comb(lint n, lint m, vl &la, vl &rela){
   return (la[n] * rela[m] % mod) * rela[n-m] % mod;
 }
 
