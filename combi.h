@@ -42,8 +42,8 @@ lint rev(lint a){
   return pow(a, mod-2);
 }
 
-lint comb(lint n, lint m, vl la){
-  return (la[n] * rev(la[m]) % mod) * rev(la[n-m]) % mod;
+lint comb(lint n, lint m, vl la, vl rela){
+  return (la[n] * rela[m] % mod) * rela[n-m] % mod;
 }
 
 int main()
@@ -56,6 +56,10 @@ int main()
     vl la(n+1, 1);
     for (int i=1; i<=n; ++i) la[i] = la[i-1]*i%mod;
 
+    vl rela(n+1);
+    rela[n] = rev(la[n]);
+    for (int i=n; i>=1; --i) rela[i-1] = rela[i] * i % mod;
+
 
     if (k == 0){
       cout<<la[n]<<endl;
@@ -64,10 +68,10 @@ int main()
       k = n-k;
       lint ans = 0;
       for (lint i = 0; i<=k-1; ++i){
-        lint p = ((i%2 == 0)? 1LL : -1LL)*pow(k-i, n) * comb(k, i, la) % mod;
+        lint p = ((i%2 == 0)? 1LL : -1LL)*pow(k-i, n) * comb(k, i, la, rela) % mod;
         ans = (ans+p)%mod;
       }
-      ans = ans*comb(n, k, la)%mod;
+      ans = ans*comb(n, k, la, rela)%mod;
       cout<<2*(ans + mod)%mod;
     }
     else cout<<0;
