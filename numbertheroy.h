@@ -22,6 +22,26 @@ typedef pair<int,int> pii;
 typedef vector<lint> vl;
 typedef pair<lint,lint> pll;
 
+vi eulerSieve(int n)    // 查找记录2-n的素数
+{
+    vi p;
+    vector<bool> vst(n+1, false);
+    for (int i = 2; i <= n; i++)
+    {
+        if (vst[i] == false)  // 如果未被筛过，则为素数
+            p.push_back(i);
+        for (int j = 0; j < p.size(); j++)
+        {
+            if (i * p[j] > n)      // 当要标记的合数超出范围时跳出
+                break;
+            vst[i * p[j]] = true;     // 将已经记录的素数的倍数进行标记
+            if (i % p[j] == 0)      //关键步骤
+                break;
+        }
+    }
+    return p;
+}
+
 vi primesUntil(int n){
   vi p;
   p.push_back(2);
