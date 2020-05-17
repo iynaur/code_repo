@@ -22,6 +22,13 @@ typedef pair<int,int> pii;
 typedef vector<lint> vl;
 typedef pair<lint,lint> pll;
 
+lint gcd(lint a, lint b){
+
+    if (a>b) swap(a, b);
+    if (b%a == 0) return a;
+    return gcd(b%a, a);
+}
+
 vi eulerSieve(int n)    // 查找记录2-n的素数
 {
     vi p;
