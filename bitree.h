@@ -35,7 +35,7 @@ public:
   BITree(const vi &arr){
 
     int n = arr.size();
-    rbtree.assign(n+2, 0);
+    rbtree.assign(n+1, 0);
 
     // Store the actual values in BITree[] using update()
     for (int i=0; i<n; i++)
@@ -52,7 +52,7 @@ public:
     index = index + 1;
 
     // Traverse all ancestors and add 'val'
-    while (index <= rbtree.size())
+    while (index < rbtree.size())
     {
       // Add 'val' to current node of BI Tree
       rbtree[index] += val;
@@ -83,6 +83,21 @@ public:
       }
       return sum;
   }
+
+  int upperBound(int x) {//largest prefix with sum not exceeding x
+      int res = 0;
+      int max = 0;
+      while(1<<max <= rbtree.size()) max++;
+      max--;
+      for (int k = max; k >= 0; --k) {
+          int p = res + (1 << k);
+          if (p < rbtree.size() && rbtree[p] <= x) {
+              x -= rbtree[p];
+              res += 1 << k;
+          }
+      }
+      return res-1;
+  }
 };
 
 int main()
@@ -105,17 +120,8 @@ int main()
 
 
     auto findk = [&](int k){
-        int l = 0;
-        int r = n;
-        while(l+1 < r){
-            int mid = (l + r)/2;
-            if (bit.getSum(mid)<k){
-                l = mid;
-            } else {
-                r = mid;
-            }
-        }
-        return r;
+
+        return bit.upperBound(k-1)+1;
     };
 
     for (int _ = 0; _<q; ++_){
