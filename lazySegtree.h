@@ -106,7 +106,7 @@ struct SegmentTree{
     return find(st,check,acc,(k<<1)|1,m,r);
   }
 
-  int find(int st,C &check){
+  int find(int st,C &check){// find first x of query [st, x]  pass the check
     T acc=ti;
     return find(st,check,acc,1,0,n);
   }
