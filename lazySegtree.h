@@ -9,11 +9,12 @@ struct SegmentTree{
   using H = function<E(E,E)>;
   int n,height;
   int rn;
-  F f;
+  F f;  // for query range value, example, sum   max
   G g;
-  H h;
-  T ti;
-  E ei;
+  H h;  // for range update, example, add
+  T ti; // zero value for query range value, 0 for sum,   min for max
+        // formally,  h(*, ti) == *
+  E ei; // zero value for range update,
   vector<T> dat;
   vector<E> laz;
   SegmentTree(F f,G g,H h,T ti,E ei):
@@ -56,7 +57,7 @@ struct SegmentTree{
       dat[k]=f(reflect((k<<1)|0),reflect((k<<1)|1));
   }
 
-  void update(int a,int b,E x){ // [ )
+  void update(int a,int b,E x){ // [a, b)
     if(a>=b) return;
     thrust(a+=n);
     thrust(b+=n-1);
@@ -74,7 +75,7 @@ struct SegmentTree{
     recalc(a);
   }
 
-  T query(int a,int b){
+  T query(int a,int b){ //[a, b)
     if(a>=b) return ti;
     thrust(a+=n);
     thrust(b+=n-1);

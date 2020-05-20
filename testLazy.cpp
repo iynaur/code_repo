@@ -50,7 +50,7 @@ void CFR1250_C(){
     while (i >=0 && s[i].first.first == cur){
       int end = s[i].first.second;
       seg.update(end, sz, s[i].second.xx);
-//      seg.print();
+      seg.print();
       i--;
     }
     i++;
