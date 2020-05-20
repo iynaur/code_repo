@@ -87,7 +87,8 @@ struct SegmentTree{
     return f(vl,vr);
   }
 
-  template<typename C>
+  using C = function<bool(T)>;
+
   int find(int st,C &check,T &acc,int k,int l,int r){
     if(l+1==r){
       acc=f(acc,reflect(k));
@@ -105,7 +106,6 @@ struct SegmentTree{
     return find(st,check,acc,(k<<1)|1,m,r);
   }
 
-  template<typename C>
   int find(int st,C &check){
     T acc=ti;
     return find(st,check,acc,1,0,n);
