@@ -10,7 +10,7 @@ struct SegmentTree{
   int n,height;
   int rn;
   F f;  // for query range value, example, sum   max
-  G g;
+  G g;  // add lazy to data
   H h;  // for range update, example, add
   T ti; // zero value for query range value, 0 for sum,   min for max
         // formally,  h(*, ti) == *

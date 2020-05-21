@@ -139,84 +139,47 @@ struct SegmentTree{
 
 #ifndef call_from_test
 
-void CFR1250_C(){
+void CFR1326_E(){
   cin.tie(0);
   ios::sync_with_stdio(0);
 
-  lint n,k;
-  cin>>n>>k;
+  int n;
+  cin>>n;
 
-  vector<pair<pii, pll>> s(n); ;
-  int len = 0;
-  for (int i=0; i<n; ++i){
-    cin>>s[i].first.first>>s[i].first.second>>s[i].second.first;
-    s[i].yy.yy = i+1;
-    len = max(len, s[i].first.second);
+  vi p(n);
+  vi vp(n+1);
+  for (int i=0; i<n; ++i) {
+    cin>>p[i];
+    vp[p[i]] = i+1;
   }
+  vi q(n);
+  for (int &i :q) cin>>i;
 
-  sort(s.begin(), s.end());
 
   auto f=[](lint a,lint b){return max(a,b);};
   auto g=[](lint a,lint b){return a+b;};
   lint ti=LONG_LONG_MIN,ei=0;
   SegmentTree<lint, lint> seg(f,g,g,ti,ei);
 
-  const int sz = len + 3;
+  const int sz = n + 3;
   vl init(sz, 0);
-  for (int i=0; i<sz; ++i) init[i] = -k*i;
+//  for (int i=0; i<sz; ++i) init[i] = -k*i;
   seg.build(init);
 
-  lint maxp = 0;
-  int ll, rr;
-  for (int i = n-1; i>=0; --i){
-    int cur = s[i].first.first;
-    while (i >=0 && s[i].first.first == cur){
-      int end = s[i].first.second;
-      seg.update(end, sz, s[i].second.xx);
-//      seg.print();
-      i--;
+  int cur = n;
+  cout<<cur<<" ";
+  for (int i=0; i<n-1; ++i){
+    //add bomb qi;
+    seg.update(1, q[i]+1, -1);
+
+    while(seg.query(1, n+1) <= 0){
+      //cur--;
+
+      seg.update(1, vp[cur]+1, 1);
+      cur--;
     }
-    i++;
-    lint cmax = seg.query(cur, sz) - init[cur-1];
-    if (cmax > maxp){
-      maxp = cmax;
-      ll = cur;
-      function<bool(lint)> check = [&](lint max){
-        return max == cmax + init[cur-1];
-      };
-      rr = seg.find(ll, check);
-    }
+    cout<<cur+1<<" ";
   }
-
-  cout<<maxp<<endl;
-  if (maxp == 0) return;
-  cout<<ll<<endl;
-
-//  for (int i=ll; i<sz; ++i){
-//    if (seg.query(i, i+1)== maxp + init[ll-1]) rr = i;
-//  }
-//  cout<<rr<<endl;
-  auto it = lower_bound(s.begin(), s.end(), make_pair(pii({ll, -ll}),pll({0LL, 0LL})));
-
-  sort(it, s.end(), [](pair<pii, pll> p1, pair<pii, pll> p2){
-    return p1.first.second < p2.first.second;
-  });
-
-  vl ans;
-  lint pp = 0;
-  for (; it != s.end(); it++){
-    pp += it->second.xx;
-    ans.push_back(it->yy.yy);
-    if (pp == maxp + (it->first.second - ll +1)*k)
-    {
-      if (rr != it->xx.second) throw -1;
-      break;
-    }
-  }
-  cout<<rr<<endl;
-
-  cout<<ans.size()<<endl;
-  for (lint & i : ans) cout<<i<<" ";
 
 
 }
@@ -226,7 +189,7 @@ void CFR1250_C(){
 */
 
 signed main(){
-  CFR1250_C();
+  CFR1326_E();
   return 0;
 }
 #endif
