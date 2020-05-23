@@ -1,6 +1,5 @@
 #include <iostream>
 #include <string>
-#include <sstream>
 #include <utility>
 #include <algorithm>
 #include <vector>
@@ -10,124 +9,122 @@
 #include <unordered_map>
 #include <queue>
 #include <cmath>
-#include <functional>
-#include <chrono>
-#include <cstring>
 
 using namespace std;
+
 typedef long long lint;
 typedef vector<int> vi;
 typedef pair<int,int> pii;
 
 typedef vector<lint> vl;
 typedef pair<lint,lint> pll;
-typedef unsigned long long ul;
-typedef vector<ul> vu;
 
-#define mpr make_pair
-
-class Solution {
-  int n;
-  vu s, t, u, v;
-
-  vu cu, cv;
-
-  vector<vu> a;
-
-  bool isRowSatis(int r){
-
-  }
-
-  void sol(int bid){
-    cu.resize(n); cv.resize(n);
-    ul vb = 1<<bid;
-    for (int i=0; i<n; ++i) cu[i] = u[i] & vb;
-    for (int i=0; i<n; ++i) cv[i] = v[i] & vb;
-
-    a.assign(n, vu(n, -1));
-
-    vi satisrow(n, 0);
-    vi satiscol(n, 0);
-
-
-    for (int i=0; i<n; ++i){
-      if (s[i] == 0 && cu[i] ||
-          s[i] == 1 && cu[i] == 0) satisrow[i] = 1;
-      for (int j = 0; j<n; ++j){
-        if (t[j] == 0 && cv[j] ||
-            t[j] == 1 && cv[j] == 0) satiscol[j] = 1;
-
-        if (s[i] == 0 && cu[i] ){//and
-          if (t[j] == 0 && cv[j] == 0){
-            cout<<-1; exit(0);
-          }
-          a[i][j] = 1;
-
-        }
-        else if (s[i] == 0 && cu[i] == 0){
-          if (cv[j] == 0) a[i][j] = 0;
-          else if (t[j] == 0) {
-
-            a[i][j] = 1;
-
-          }
-          satiscol[j] = 1;
-          satisrow[i] = 1;
-        }
-        else if (s[i] == 1 && cu[i]){//or
-          if (cv[i]){
-            a[i][j]=1;
-          }
-          else if (t[i]) {
-
-            a[i][j]=0;
-          }
-          satiscol[j] = 1;
-          satisrow[i] = 1;
-        }
-        else {
-          if (t[j] && cv[j]){
-            cout<<-1; exit(0);
-          }
-          a[i][j] = 0;
-        }
-      }
-    }
-
-    set<int> needrow, needcol;
-    for (int i=0; i<n; ++i){
-      if (!satisrow[i]) {
-
-        needrow.insert(i);
-      }
-      if (!satiscol[i]) needcol.insert(i);
-    }
-
-    if (needrow.size() == 1 || needcol.size() == 1){cout<<-1; exit(0);}
-
-//    if (needrow.size() == 0 || needcol.size() == 0)
-  }
-
+class mset { // choose biggest k value
+  multiset<lint> candi;
+  multiset<lint> choose;
+  lint sumc = 0; //
 public:
-  void sol(){
-    cin>>n;
-   s.resize(n);
-   t.resize(n);
-   u.resize(n);
-   v.resize(n);
-   for (ul &v: s) cin>>v;
-   for (ul &v: t) cin>>v;
-   for (ul &v: u) cin>>v;
-   for (ul &v_: v) cin>>v_;
+  void insert(lint v){
+    if (choose.empty() || v <= *choose.begin()){
+      candi.insert(v);
+    } else {
+      choose.insert(v);
+      sumc += v;
+      candi.insert(*choose.begin());
+      sumc -= *choose.begin();
+      choose.erase(choose.begin());
+    }
+  }
 
+  lint sum(){
+    return sumc;
+  }
+
+  int size(){
+    return choose.size() + candi.size();
+  }
+
+  bool inc(){
+    if (candi.empty()) return false;
+    choose.insert(*candi.rbegin());
+    sumc += *candi.rbegin();
+    candi.erase(prev(candi.end()));
+    return true;
+  }
+  bool pop(lint v){
+    if (candi.count(v))
+    {
+      candi.erase(candi.find(v));
+      return true;
+    }
+    else {
+      choose.erase(choose.find(v));
+      sumc -= v;
+      return inc();
+    }
 
   }
 };
 
-int tmain()
+
+int main()
 {
-    ios_base::sync_with_stdio(0);    cin.tie(NULL);    cout.tie(NULL);
+    ios_base::sync_with_stdio(0);
+    cin.tie(NULL);
+    cout.tie(NULL);
+
+    int t; cin>>t;
+    while(t--){
+        int n; cin>>n;
+        lint s; cin>>s;
+
+        int m = n/2;
+        vector<pll> p(n);
+        vector<pair<lint, pll>> eve;
+        lint base = 0;
+        for (auto &pl : p){
+            cin>>pl.first>>pl.second;
+            eve.push_back({pl.first, pl});
+            eve.push_back({pl.second+1, pl});
+            base += pl.first;
+        }
+
+        sort(eve.begin(), eve.end());
+
+        mset candi;
+        int cnt;
+        int had = 0;
+
+        lint ans = 0;
+
+        for (int i = 0; i< 2*n; ++i){
+            pair<lint, pll> cur = eve[i];
+            if (cur.first == cur.second.first){
+                candi.insert(cur.first);
+                if (had + candi.size() > m) candi.inc();
 
 
+            }
+            else {
+                if (!candi.pop(cur.second.first)) break;
+                had++;
+            }
 
+            if ( i+1 < 2*n && eve[i+1].first != cur.first){
+                int need = candi.size() - (m - had);
+                if (need <= 0)
+                  ans = max(ans, eve[i+1].first - 1);
+                else
+                {
+                  lint lv = (s-(base - candi.sum()))/need;
+                  if (lv >= cur.first)
+                    ans = max(ans, min(lv, eve[i+1].first - 1));
+                  else
+                    break;
+                }
+            }
+        }
+        cout<<ans<<"\n";
+
+    }
 }
