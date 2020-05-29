@@ -34,7 +34,7 @@ public:
 
     tree.assign(2 * el, T());
 
-    if (0){
+    {
         for (size_t i = 0; i < data.size(); ++i)
             tree[i + el - 1] = data[i];
 
