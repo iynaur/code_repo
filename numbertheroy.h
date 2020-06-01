@@ -50,38 +50,38 @@ vi eulerSieve(int n)    // 查找记录2-n的素数
 }
 
 vi primesUntil(int n){
-  vi p;
-  p.push_back(2);
-  for (int i =3; i<=n; ++i){
-      for (int j=0; j<p.size(); ++j){
-          if (i%p[j] == 0) break;
-          if (p[j]* p[j]> i)
-          {
-              p.push_back(i);
-              break;
-          }
-      }
-  }
-  return p;
+    vi p;
+    p.push_back(2);
+    for (int i =3; i<=n; ++i){
+        for (int j=0; j<p.size(); ++j){
+            if (i%p[j] == 0) break;
+            if (p[j]* p[j]> i)
+            {
+                p.push_back(i);
+                break;
+            }
+        }
+    }
+    return p;
 }
 
-vector<pii> defactor(int v, const vi& p){// prime,   power
-  vector<pii> ans;
-  int pid = 0;
-  while(v>1){
-      int cnt = 0;
-      while(v%p[pid] == 0) {
-          cnt++;
-          v= v/p[pid];
-      }
-      if (cnt) ans.push_back({p[pid], cnt});
-      pid++;
-      if (v > 1 && p[pid]*p[pid]>v){
-        ans.push_back({v, 1});
-          break;
-      }
-  }
-  return ans;
+vector<pll> defactor(lint v, const vi& p){// prime,   power
+    vector<pll> ans;
+    int pid = 0;
+    while(v>1){
+        int cnt = 0;
+        while(v%p[pid] == 0) {
+            cnt++;
+            v= v/p[pid];
+        }
+        if (cnt) ans.push_back({p[pid], cnt});
+        pid++;
+        if (v > 1 && (pid >= p.size() || lint(p[pid])*p[pid]>v)){
+            ans.push_back({v, 1});
+            break;
+        }
+    }
+    return ans;
 }
 
 void main_test()
