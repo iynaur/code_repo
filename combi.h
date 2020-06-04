@@ -27,7 +27,7 @@ typedef pair<lint,lint> pll;
 #define mpr make_pair
 
 lint mod = 998244353;
-lint pow(lint a, lint n){
+lint mypow(lint a, lint n){
   lint res = 1;
   lint base = a;
   while(n > 0){
@@ -39,7 +39,7 @@ lint pow(lint a, lint n){
 }
 
 lint rev(lint a){
-  return pow(a, mod-2);
+  return mypow(a, mod-2);
 }
 
 lint comb(lint n, lint m, vl &la, vl &rela){
@@ -68,7 +68,7 @@ int main()
       k = n-k;
       lint ans = 0;
       for (lint i = 0; i<=k-1; ++i){
-        lint p = ((i%2 == 0)? 1LL : -1LL)*pow(k-i, n) * comb(k, i, la, rela) % mod;
+        lint p = ((i%2 == 0)? 1LL : -1LL)*mypow(k-i, n) * comb(k, i, la, rela) % mod;
         ans = (ans+p)%mod;
       }
       ans = ans*comb(n, k, la, rela)%mod;
