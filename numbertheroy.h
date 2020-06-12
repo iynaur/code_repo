@@ -85,12 +85,39 @@ vector<pll> defactor(lint v, const vi& p){// prime,   power
     return ans;
 }
 
+vector<pii> defactorSPF(int v, const vi& spf){// prime,   power
+    vector<pii> ans;
+    while(v>1){
+        int p = spf[v];
+        if (ans.empty() || ans.back().first != p){
+          ans.push_back({p,1});
+        } else {
+          ans.back().second++;
+        }
+        v= v/p;
+    }
+    return ans;
+}
+
+lint mod = 998244353;
+lint mypow(lint a, lint n){
+  lint res = 1;
+  lint base = a;
+  while(n > 0){
+    if (n%2) res = res*base%mod;
+    base = base*base%mod;
+    n = n/2;
+  }
+  return res;
+}
+
+
 int main()
 {
     ios_base::sync_with_stdio(0);    cin.tie(NULL);    cout.tie(NULL);
 
     int n; cin>>n;
-    vl a(n);
+    vl a(n, 9840769);
     for (int i=0; i<n; ++i) cin>>a[i];
     vl d1(n), d2(n);
 
@@ -99,24 +126,19 @@ int main()
     euler(1e7 + 1, p, spf);
 
     for (int i=0; i<n; ++i){
-      int p = spf[a[i]];
-      int pp = 1;
-        while(a[i]%p == 0) {
-          pp *= p;
-          a[i] /= p;
-        }
-        if (a[i] == 1){
-            d1[i]=-1;
-            d2[i]=-1;
-        }else{
-          d1[i]=pp;
-          d2[i]=a[i];
-        }
+      vector<pii> ans = defactorSPF(a[i], spf);
+      if (ans.size() < 2){
+          d1[i]=-1;
+          d2[i]=-1;
+      }else{
+          d1[i] = mypow(ans[0].first, ans[0].second);
+          d2[i]=a[i]/d1[i];
+      }
     }
 
     for (int i=0; i<n; ++i) cout<<d1[i]<<" ";
     cout<<"\n";
     for (int i=0; i<n; ++i) cout<<d2[i]<<" ";
-
+    cout<<"\n";
 
 }
