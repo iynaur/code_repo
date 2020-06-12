@@ -29,6 +29,8 @@ lint gcd(lint a, lint b){
     return gcd(b%a, a);
 }
 
+
+
 vi eulerSieve(int n)    // 查找记录2-n的素数
 {
     vi p;
@@ -49,20 +51,22 @@ vi eulerSieve(int n)    // 查找记录2-n的素数
     return p;
 }
 
-vi primesUntil(int n){
-    vi p;
-    p.push_back(2);
-    for (int i =3; i<=n; ++i){
-        for (int j=0; j<p.size(); ++j){
-            if (i%p[j] == 0) break;
-            if (p[j]* p[j]> i)
-            {
-                p.push_back(i);
-                break;
-            }
-        }
+vi eulerSPF(int n)
+{
+  vi prime = eulerSieve(n);
+  vi minprime(n+1, 0);
+  int c=0,i,j;
+  for(i=2;i<=n;i++)
+  {
+    if(minprime[i] == 0)
+      minprime[i]=i;
+    for(j=0; j<prime.size() && i*prime[j]<=n; j++)
+    {
+      minprime[i*prime[j]]=prime[j];
+      if(i%prime[j]==0)break;
     }
-    return p;
+  }
+  return minprime;
 }
 
 vector<pll> defactor(lint v, const vi& p){// prime,   power
@@ -84,51 +88,37 @@ vector<pll> defactor(lint v, const vi& p){// prime,   power
     return ans;
 }
 
-void main_test()
+int main()
 {
     ios_base::sync_with_stdio(0);    cin.tie(NULL);    cout.tie(NULL);
 
     int n; cin>>n;
-    vi a(n); for (int &v:a) cin>>v;
+    vl a(n);
+    for (int i=0; i<n; ++i) cin>>a[i];
+    vl d1(n), d2(n);
 
-    vi p = primesUntil(2e5);
+    vi p = eulerSieve(1e4);
+    vi spf = eulerSPF(1e7 + 1);
 
-    map<int, int> revp;
-    for (int i=0; i<p.size(); ++i){
-        revp[p[i]] = i;
-    }
-
-    vector<multiset<int>> scnt(p.size());
-    vi tcnt(p.size(), 0);
-
-    auto add = [&](int pid, int cnt){
-        tcnt[pid]++;
-        scnt[pid].insert(cnt);
-        if (scnt[pid].size()>2){
-            scnt[pid].erase(prev(scnt[pid].end()));
+    for (int i=0; i<n; ++i){
+      int p = spf[a[i]];
+      int pp = 1;
+        while(a[i]%p == 0) {
+          pp *= p;
+          a[i] /= p;
         }
-    };
-
-
-    for (int i = 0; i<a.size(); ++i){
-        int v = a[i];
-        vector<pii> fact = defactor(v, p);
-        for (pii pp : fact){
-          add(revp[pp.first], pp.second);
+        if (a[i] == 1){
+            d1[i]=-1;
+            d2[i]=-1;
+        }else{
+          d1[i]=pp;
+          d2[i]=a[i];
         }
     }
 
-    lint res = 1;
-    for (int pid=0; pid<p.size(); ++pid){
-        if (tcnt[pid]<= n-2) continue;
-        if (tcnt[pid] == n-1) for (int i=0; i< *scnt[pid].begin(); ++i){
-                res *= p[pid];
-            }
-        else for (int i=0; i< *next(scnt[pid].begin()); ++i){
-            res *= p[pid];
-        }
-    }
-    cout<<res;
+    for (int i=0; i<n; ++i) cout<<d1[i]<<" ";
+    cout<<"\n";
+    for (int i=0; i<n; ++i) cout<<d2[i]<<" ";
 
 
 }

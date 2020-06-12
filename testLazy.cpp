@@ -188,7 +188,7 @@ void CFR1326_E(){
   https://codeforces.com/contest/1179/problem/C
 */
 
-signed main(){
+signed tmain(){
   CFR1326_E();
   return 0;
 }

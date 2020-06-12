@@ -15,6 +15,7 @@
 #include <cstring>
 #include <limits.h>
 #include <list>
+#include "numbertheroy.h"
 
 using namespace std;
 typedef long long lint;
@@ -127,7 +128,7 @@ int maxSubarrayXOR(vi set)
     return res;
 }
 
-int main()
+int main_r()
 {
     ios_base::sync_with_stdio(0);    cin.tie(NULL);    cout.tie(NULL);
 
