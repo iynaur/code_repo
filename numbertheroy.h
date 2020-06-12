@@ -29,7 +29,22 @@ lint gcd(lint a, lint b){
     return gcd(b%a, a);
 }
 
+void euler(int n, vi &prime, vi &minprime)
+{
+  prime.clear();
+  minprime.assign(n+1, 0);
+  for(int i=2;i<=n;i++)
+  {
+    if(!minprime[i])
+      prime.push_back(i),minprime[i]=i;
+    for(int j=0; j<prime.size() && i*prime[j]<=n; j++)
 
+    {
+      minprime[i*prime[j]]=prime[j];
+      if(i%prime[j]==0)break;
+    }
+  }
+}
 
 vi eulerSieve(int n)    // 查找记录2-n的素数
 {
@@ -49,24 +64,6 @@ vi eulerSieve(int n)    // 查找记录2-n的素数
         }
     }
     return p;
-}
-
-vi eulerSPF(int n)
-{
-  vi prime = eulerSieve(n);
-  vi minprime(n+1, 0);
-  int c=0,i,j;
-  for(i=2;i<=n;i++)
-  {
-    if(minprime[i] == 0)
-      minprime[i]=i;
-    for(j=0; j<prime.size() && i*prime[j]<=n; j++)
-    {
-      minprime[i*prime[j]]=prime[j];
-      if(i%prime[j]==0)break;
-    }
-  }
-  return minprime;
 }
 
 vector<pll> defactor(lint v, const vi& p){// prime,   power
@@ -97,8 +94,9 @@ int main()
     for (int i=0; i<n; ++i) cin>>a[i];
     vl d1(n), d2(n);
 
-    vi p = eulerSieve(1e4);
-    vi spf = eulerSPF(1e7 + 1);
+    vi p;
+    vi spf;
+    euler(1e7 + 1, p, spf);
 
     for (int i=0; i<n; ++i){
       int p = spf[a[i]];
