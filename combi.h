@@ -26,7 +26,7 @@ typedef pair<lint,lint> pll;
 
 #define mpr make_pair
 
-lint mod = 998244353;
+lint mod = 1e9 + 7;
 lint mypow(lint a, lint n){
   lint res = 1;
   lint base = a;
@@ -42,37 +42,46 @@ lint rev(lint a){
   return mypow(a, mod-2);
 }
 
-lint comb(lint n, lint m, vl &la, vl &rela){
-  return (la[n] * rela[m] % mod) * rela[n-m] % mod;
-}
+struct ComBi {
+  ComBi() = delete;
+  explicit ComBi(int n){
+    la.assign(n+1, 1);
+    for (int i=1; i<=n; ++i) la[i] = la[i-1]*i%mod;
+
+    rela.assign(n+1, 0);
+    rela[n] = rev(la[n]);
+    for (int i=n; i>=1; --i) rela[i-1] = rela[i] * i % mod;
+
+  }
+
+  lint comb(lint n, lint m){
+    return (la[n] * rela[m] % mod) * rela[n-m] % mod;
+  }
+
+  vl la, rela;
+};
+
+
+
 
 int main()
 {
     ios_base::sync_with_stdio(0);    cin.tie(NULL);    cout.tie(NULL);
 
-    lint n, k;
-    cin>>n>>k;
+    int k; cin>>k;
+    string s; cin>>s;
+    int n = s.size();
 
-    vl la(n+1, 1);
-    for (int i=1; i<=n; ++i) la[i] = la[i-1]*i%mod;
+    ComBi cb(2e6 + 5);
 
-    vl rela(n+1);
-    rela[n] = rev(la[n]);
-    for (int i=n; i>=1; --i) rela[i-1] = rela[i] * i % mod;
-
-
-    if (k == 0){
-      cout<<la[n]<<endl;
-    } else if (k <= n-1) {
-
-      k = n-k;
-      lint ans = 0;
-      for (lint i = 0; i<=k-1; ++i){
-        lint p = ((i%2 == 0)? 1LL : -1LL)*mypow(k-i, n) * comb(k, i, la, rela) % mod;
-        ans = (ans+p)%mod;
-      }
-      ans = ans*comb(n, k, la, rela)%mod;
-      cout<<2*(ans + mod)%mod;
+    lint ans = 0;
+    for (int l = n-1; l<= n + k-1; ++l){
+        lint base =  cb.comb(l, n-1) * mypow(25, l - n +1) % mod;
+        base = base * mypow(26, n + k - l-1) % mod;
+        ans = (ans + base)%mod;
     }
-    else cout<<0;
+    cout<<ans;
+
+
 }
+
