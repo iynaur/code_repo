@@ -9,6 +9,14 @@ typedef pair<lint,lint> pll;
 
 #define mpr make_pair
 
+
+extern int __builtin_clz(unsigned x); // count leading zeros
+
+extern int __builtin_ctz(unsigned x); // count trailing zeros
+
+extern int __builtin_popcount(unsigned x); // 1的个数
+
+
 int bitcnt(lint v){
   return __builtin_popcountll(v);
 }
