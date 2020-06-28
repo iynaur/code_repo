@@ -14,7 +14,7 @@
 #include <chrono>
 #include <cstring>
 #include <bits/stdc++.h>
-
+#include "bitmask.h"
 
 using namespace std;
 typedef long long lint;
