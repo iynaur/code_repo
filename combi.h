@@ -68,19 +68,12 @@ int main()
 {
     ios_base::sync_with_stdio(0);    cin.tie(NULL);    cout.tie(NULL);
 
-    int k; cin>>k;
-    string s; cin>>s;
-    int n = s.size();
+    Solution s;
+    vector<vi> t({{2,1},{3,1},{1,4}});
 
-    ComBi cb(2e6 + 5);
-
-    lint ans = 0;
-    for (int l = n-1; l<= n + k-1; ++l){
-        lint base =  cb.comb(l, n-1) * mypow(25, l - n +1) % mod;
-        base = base * mypow(26, n + k - l-1) % mod;
-        ans = (ans + base)%mod;
-    }
-    cout<<ans;
+    s.minNumberOfSemesters(4,
+                           t,
+                           2);
 
 
 }
