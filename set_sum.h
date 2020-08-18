@@ -50,21 +50,70 @@ struct SetSum {
 
 };
 
+template <typename T>
+struct SetPartSum {
+  SetSum<T> low, high;
+  function<bool(T, T)> less = [](T t1, T t2){
+    return t1 < t2;
+  };
+
+  void add(T t){
+    if (less(t, *high.begin())){
+      low.insert(t);
+    } else {
+      high.insert(t);
+      low.insert(*high.begin());
+      high.erase(high.begin());
+    }
+  }
+
+  bool needShink = false;
+  void remove(T t){
+    if (low.count(t)){
+      low.erase(t);
+    } else {
+      high.erase(t);
+      if (low.empty()){
+        needShink = true;
+      } else {
+        high.insert(*low.rbegin());
+        low.erase(*low.rbegin());
+      }
+    }
+  }
+
+  void expand(){
+    assert(low.size());
+    high.insert(*low.rbegin());
+    low.erase(*low.rbegin());
+  }
+
+  void shink(){
+    if (needShink){
+      needShink = false;
+      return;
+    }
+    assert(high.size());
+    low.insert(*high.begin());
+    high.erase(high.begin());
+  }
+};
+
+
 
 set<lint> tp0, tp1;
-SetSum<lint> sdb, ssin;
-
+//SetSum<lint> sdb, ssin;
+SetPartSum<lint> sp;
 
 lint getdb(){
-  assert(sdb.size() == tp1.size());
-  if (sdb.empty()) return 0;
+  if (sp.high.empty()) return 0;
   if (tp0.size()){
-    if ( *tp0.rbegin() >= *sdb.begin())
-      return sdb.sum;
+    if ( *tp0.rbegin() >= *sp.high.begin())
+      return sp.high.sum;
    else
-    return sdb.sum - *sdb.begin() + *tp0.rbegin();
+    return sp.high.sum - *sp.high.begin() + *tp0.rbegin();
   } else {
-    return sdb.sum - *sdb.begin();
+    return sp.high.sum - *sp.high.begin();
   }
 }
 
@@ -72,18 +121,10 @@ void add(lint d, lint tp){
   if (tp == 0) tp0.insert(d);
   else tp1.insert(d);
 
-  if (sdb.empty() || d < *sdb.begin())
-    ssin.insert(d);
-  else {
-    sdb.insert(d);
-    ssin.insert(*sdb.begin());
-    sdb.erase(sdb.begin());
-  }
+  sp.add(d);
 
   if (tp == 1){
-    //sdb++
-    sdb.insert(*ssin.rbegin());
-    ssin.erase(*ssin.rbegin());
+    sp.expand();
   }
 }
 
@@ -91,22 +132,10 @@ void rm(lint d, lint tp){
   if (tp == 0) tp0.erase(d);
   else tp1.erase(d);
 
-  if (ssin.count(d)) ssin.erase(d);
-  else {
-    sdb.erase(d);
-    if (ssin.empty())
-    {
-      assert(tp == 1);
-      return;
-    }
-    sdb.insert(*ssin.rbegin());
-    ssin.erase(*ssin.rbegin());
-  }
+  sp.remove(d);
 
   if (tp == 1){
-    //sdb--
-    ssin.insert(*sdb.begin());
-    sdb.erase(sdb.begin());
+    sp.shink();
   }
 }
 
@@ -126,6 +155,6 @@ int main()
         rm(-d, tp);
       }
 
-      cout<<sdb.sum + ssin.sum + getdb()<<'\n';
+      cout<<sp.high.sum + sp.low.sum + getdb()<<'\n';
     }
 }
