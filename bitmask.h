@@ -18,7 +18,7 @@ extern int __builtin_popcount(unsigned x); // 1的个数
 
 
 int bitcnt(lint v){
-  return __builtin_popcountll(v);
+  return __builtin_popcount(v);
 }
 
 lint nextSubMask(lint mask, lint sub){
