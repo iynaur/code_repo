@@ -29,3 +29,5 @@ struct pair_hash {
     return std::hash<long long>()(l);
   }
 };
+using namespace std;
+typedef unordered_map<pair<int, int>, int, pair_hash> umapii;
