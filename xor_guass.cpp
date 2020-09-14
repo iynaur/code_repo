@@ -15,7 +15,6 @@
 #include <cstring>
 #include <limits.h>
 #include <list>
-#include "combi.h"
 
 using namespace std;
 typedef long long lint;

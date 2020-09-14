@@ -64,7 +64,7 @@ struct ComBi {
 
 
 
-int main()
+int main_combi()
 {
     ios_base::sync_with_stdio(0);    cin.tie(NULL);    cout.tie(NULL);
 
