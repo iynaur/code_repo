@@ -51,6 +51,16 @@ struct custom_hash {
     }
 };
 
+typedef long long ll;
+const ll TIME = chrono::high_resolution_clock::now().time_since_epoch().count();
+const ll SEED = (ll)(new ll);
+const ll RANDOM = TIME ^ SEED;
+const ll MOD = (int)1e9+7;
+const ll MUL = (int)1e6+3;
+struct chash{
+    ll operator()(ll x) const { return std::hash<ll>{}((x ^ RANDOM) % MOD * MUL); }
+};
+
 template<class TK, class TV> struct RHashTable {
     static const int MAXN =  1000000;
     static const int MAGIC =  654321;
