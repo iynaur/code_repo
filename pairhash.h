@@ -41,8 +41,8 @@ typedef pair<lint,lint> pll;
 #define mpr make_pair
 
 template<class TK, class TV> struct RHashTable {
-    static const int MAXN = 1000000;
-    static const int MAGIC = 654321;
+    static const int MAXN =  1000000;
+    static const int MAGIC =  654321;
     int ptr;
     int lst[MAGIC];
     int prv[MAXN];
@@ -101,6 +101,25 @@ template<class TK, class TV> struct RHashTable {
             }
             nxt = e;
         }
+    }
+
+    void forall( function<void(pair<TK, TV>)> f){
+      for (int i = 0; i < cnt; i++) {
+          int hs = used[i];
+          for (int e = lst[hs]; ~e; e = prv[e]) {
+            f({l[e], x[e]});
+          }
+      }
+
+    }
+
+    void print(){
+      cerr<<"===start===\n";
+      function<void(pair<TK, TV>)> out= [](pair<TK, TV> p){
+        cerr<<p.first<<" "<<p.second<<"\n";
+      };
+      forall(out);
+      cerr<<"===end===\n";
     }
 };
 
