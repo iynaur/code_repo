@@ -41,8 +41,8 @@ typedef pair<lint,lint> pll;
 #define mpr make_pair
 
 template<class TK, class TV> struct RHashTable {
-    static const int MAXN = 10000000;
-    static const int MAGIC = 7654321;
+    static const int MAXN = 1000000;
+    static const int MAGIC = 654321;
     int ptr;
     int lst[MAGIC];
     int prv[MAXN];
