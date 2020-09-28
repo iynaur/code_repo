@@ -1,36 +1,9 @@
 #pragma once
-#include <iostream>
-#include <string>
-#include <utility>
-#include <algorithm>
-#include <vector>
-#include <set>
-#include <map>
-#include <unordered_set>
-#include <unordered_map>
-#include <queue>
-#include <cmath>
-#include <functional>
-#include <chrono>
-#include <cstring>
-
-struct pair_hash {
-  template <typename T1, typename T2>
-  std::size_t operator () (const std::pair<T1, T2> &p) const {
-    std::size_t h1 = std::hash<T1>()(p.first);
-    std::size_t h2 = std::hash<T2>()(p.second);
-    return h1 ^ h2;
-  }
-
-  std::size_t operator () (const std::pair<int, int> &p) const {
-    long long l = p.first;
-    l = l << 32;
-    l = l | p.second;
-    return std::hash<long long>()(l);
-  }
-};
+#include <bits/stdc++.h>
 using namespace std;
-typedef unordered_map<pair<int, int>, int, pair_hash> umapii;
+
+#include <ext/pb_ds/assoc_container.hpp>
+using namespace __gnu_pbds;
 
 using namespace std;
 typedef long long lint;
@@ -39,6 +12,44 @@ typedef pair<int,int> pii;
 typedef vector<lint> vl;
 typedef pair<lint,lint> pll;
 #define mpr make_pair
+
+lint seed = rand();
+struct pair_hash {
+    template <typename T1, typename T2>
+    std::size_t operator () (const std::pair<T1, T2> &p) const {
+        std::size_t h1 = std::hash<T1>()(p.first);
+        std::size_t h2 = std::hash<T2>()(p.second);
+        return h1 ^ h2;
+    }
+
+    std::size_t operator () (const std::pair<int, int> &p) const {
+        long long l = p.first;
+        l = l << 32;
+        l = l | p.second;
+        return std::hash<long long>()(l);
+    }
+
+
+    std::size_t operator () (const lint &l) const {
+
+        return std::hash<long long>()(l^seed);
+    }
+};
+
+struct custom_hash {
+    static uint64_t splitmix64(uint64_t x) {
+        // http://xorshift.di.unimi.it/splitmix64.c
+        x += 0x9e3779b97f4a7c15;
+        x = (x ^ (x >> 30)) * 0xbf58476d1ce4e5b9;
+        x = (x ^ (x >> 27)) * 0x94d049bb133111eb;
+        return x ^ (x >> 31);
+    }
+
+    size_t operator()(uint64_t x) const {
+        static const uint64_t FIXED_RANDOM = chrono::steady_clock::now().time_since_epoch().count();
+        return splitmix64(x + FIXED_RANDOM);
+    }
+};
 
 template<class TK, class TV> struct RHashTable {
     static const int MAXN =  1000000;
@@ -127,40 +138,41 @@ RHashTable<lint, lint> cntpre0;
 RHashTable<lint, lint> cntpre1;
 
 void solve(){
-    //RHashTable<lint, lint> cnt;  //will crash duo to stack size issue
-    int n;
+    int n= 3e5;;
     cin>>n;
-    vl a(n); for (lint &v : a)cin>>v;
+    vl a(n); for (lint &v : a) cin>>v;
     lint x = 0;
     lint mi = 0;
-    for (int bit = 0; bit < 32; ++bit){
-        cntpre0.clear();
-        cntpre1.clear();
-        lint cntord = 0; lint cntrev = 0;
+    seed = rand();
+    for (int bit = 0; bit < 30; ++bit){
+        gp_hash_table<lint, lint, custom_hash> cntpre0;
+        gp_hash_table<lint, lint, custom_hash> cntpre;
+        lint cntord = 0;
         for (int i = 0; i<n; ++i){
-            lint v = a[i];
-
-            if ((v>>bit)%2 == 0 )
-            {
-              cntpre0[v>>(bit+1)]++;
-              cntrev += cntpre1[v>>(bit+1)];
-            }
+            //            lint v = a[i];
+            lint key = a[i]>>(bit+1);
+            cntpre[key]++;
+            if ((a[i]>>bit)%2 == 0 )
+                cntpre0[key]++;
             else
-            {
-              cntord += cntpre0[v>>(bit+1)];
-              cntpre1[v>>(bit+1)]++;
-            }
+                cntord += cntpre0[key];
 
         }
         lint tot = 0;
-
-        if (cntrev >  cntord){
+        for (pll p : cntpre){
+            tot += p.second * (p.second-1) / 2;
+            lint s0 = cntpre0[p.first];
+            lint s1 = p.second - s0;
+            tot -= s0*(s0-1)/2 + s1*(s1-1)/2;
+        }
+        if (tot - cntord >  cntord){
             x = x | (1<<bit);
         }
-        mi += min(cntord, cntrev);
+        mi += min(cntord, tot - cntord);
     }
     cout<<mi<<"\n";
-    cout<<x;
+    cout<<x<<"\n";
+    //    cout<<clock();
 }
 
 int main()
@@ -168,7 +180,7 @@ int main()
     ios_base::sync_with_stdio(0);    cin.tie(NULL);    cout.tie(NULL);
 
     int t=1;
-//    cin>>t;
+    //    cin>>t;
     while(t--){
         solve();
     }
