@@ -38,12 +38,12 @@ lint MST_prim(const vector<vi> &m, int start, int end){// 0, n if 0-indexed or 1
   return totalcost;
 }
 
-int main_graph(){
+void main_graph(){
   vector<vi> mp;
   mp.push_back(vi({0,1,2,3}));
   mp.push_back(vi({1,0,2,3}));
   mp.push_back(vi({2,2,0,3}));
   mp.push_back(vi({3,3,3,0}));
 
-  MST_prim(mp, 0, 4);
+  cout << MST_prim(mp, 0, 4)<<endl;
 }

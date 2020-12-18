@@ -2,7 +2,7 @@
 #include <iomanip>
 using namespace std;
 
-inline int main_float( void )
+inline int test_float( void )
 {
     const double value = 12.3456789;
 

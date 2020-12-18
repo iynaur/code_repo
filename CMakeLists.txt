@@ -9,4 +9,4 @@ file(GLOB SRC_FILES "*.cpp")
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-add_executable(codeRepo ${HEAD_FILES} ${SRC_FILES})
+add_executable(codeRepo ${SRC_FILES})
