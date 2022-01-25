@@ -14,7 +14,7 @@ extern int __builtin_clz(unsigned x); // count leading zeros
 
 extern int __builtin_ctz(unsigned x); // count trailing zeros
 
-extern int __builtin_popcount(unsigned x); // 1的个数
+extern int __builtin_popcount(unsigned x); // count 1, leetcode usable
 
 
 int bitcnt(lint v){
