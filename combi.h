@@ -58,11 +58,18 @@ struct ComBi {
     return (la[n] * rela[m] % mod) * rela[n-m] % mod;
   }
 
+  lint bign_smallk(lint n, lint k) {
+      lint res = 1;
+      for (lint b = n; b > n-k; b--) {
+          res = res * b % mod;
+      }
+
+      return res * rela[k] % mod;
+
+  }
+
   vl la, rela;
 };
-
-
-
 
 int main_combi()
 {
