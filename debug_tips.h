@@ -28,9 +28,26 @@ typedef vector<lint> vl;
 typedef pair<lint,lint> pll;
 #define mpr make_pair
 
+void bugfunction() {
+    vi a;
+    // init a
+    for (int i = 0; i < a.size() - 1; i++){
+        if (a[i]!=a[i+1]) {
+            return;
+        }
+    }
+
+    //======
+    auto func_na = [](){
+        return int();
+    };
+    int ia = func_na();
+    // past from some where
+    int b = ia; // not get old ia;
+}
+
+
 //#define stress  // switch
-
-
 // stress variable
 int n = 6;
 vi a(n + 1);
