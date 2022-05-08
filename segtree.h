@@ -95,3 +95,56 @@ private:
     }
   }
 };
+
+
+using namespace std;
+class Solution {
+
+public:
+    vector<int> longestRepeating(string s, string queryCharacters, vector<int>& queryIndices) {
+        int n = s.size(), k = queryCharacters.size();
+        multiset<int> ms;
+        set<pair<int, int>> sp;
+        for (int i = 0, j = 0; i < s.size(); i = j) {
+            while (j < s.size() and s[i] == s[j]) j += 1;
+            sp.emplace(i, j - 1);   // [left, right]
+            ms.insert(j - i);
+        }
+        vector<int> res(k);
+        for (int i = 0; i < k; i += 1) {
+            int p = queryIndices[i];
+            char c = queryCharacters[i];
+            if (c != s[p]) {
+                auto pr = *prev(sp.upper_bound(make_pair(p, n)));
+                ms.erase(ms.find(pr.second - pr.first + 1)); // remove cur seg
+                sp.erase(pr);
+                if (pr.first < p) { // add left seg
+                    sp.emplace(pr.first, p - 1);
+                    ms.insert(p - pr.first);
+                }
+                if (pr.second > p) { // add right seg
+                    sp.emplace(p + 1, pr.second);
+                    ms.insert(pr.second - p);
+                }
+                s[p] = c;
+                int L = p, R = p;
+                if (p + 1 < n and s[p + 1] == c) { // merge right
+                    auto it = sp.upper_bound(make_pair(p, n));
+                    R = it->second;
+                    ms.erase(ms.find(it->second - it->first + 1));
+                    sp.erase(it);
+                }
+                if (p and s[p - 1] == c) { // merge left
+                    auto it = prev(sp.upper_bound(make_pair(p, n)));
+                    L = it->first;
+                    ms.erase(ms.find(it->second - it->first + 1));
+                    sp.erase(it);
+                }
+                sp.emplace(L, R);
+                ms.insert(R - L + 1);
+            }
+            res[i] = *ms.rbegin();
+        }
+        return res;
+    }
+};

@@ -9,16 +9,18 @@ typedef pair<lint,lint> pll;
 
 #define mpr make_pair
 
-
+// =======
+// not for lint!!
 extern int __builtin_clz(unsigned x); // count leading zeros
 
 extern int __builtin_ctz(unsigned x); // count trailing zeros
+extern int __builtin_clzll(unsigned long long);
 
 extern int __builtin_popcount(unsigned x); // count 1, leetcode usable
 
 
 int bitcnt(lint v){
-  return __builtin_popcount(v);
+  return __builtin_clzll(v);
 }
 
 lint nextSubMask(lint mask, lint sub){

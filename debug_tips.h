@@ -5,6 +5,7 @@
 //  WA    check logic
 //        try brute search
 //        try prove logic
+//        output format
 
 //  operators   always use () to explicitly set order.
 //  check boundray conditions
@@ -15,6 +16,8 @@
 // it0, it1, it2...  do not copy past without check!!
 
 // hard but maybe easy problem:   think bfs not dfs
+// check examples before code, make sure code the right process
+// check time & space complexity before code, make sure code the right process
 
 #endif // DEBUG_TIPS_H
 
@@ -44,6 +47,32 @@ void bugfunction() {
     int ia = func_na();
     // past from some where
     int b = ia; // not get old ia;
+
+    {
+        //=======
+        lint res;
+        int ia, ib;
+        res += ia*ib; // overflow!!!
+    }
+
+    {
+        lint a = 1<<35; // wrong
+        a = 1LL << 35;
+    }
+
+    {
+        int a = 0;
+        int b = rand();
+        //...
+        swap(a, b); // swap is evil, change a without a =
+        //...
+        assert(a == 0); // boom
+    }
+
+    {
+        vl s(2);
+        assert(s[1] * s[0] > 0); // to see if they are both negative or positive, but lint overflow
+    }
 }
 
 
