@@ -73,6 +73,12 @@ void bugfunction() {
         vl s(2);
         assert(s[1] * s[0] > 0); // to see if they are both negative or positive, but lint overflow
     }
+
+    {
+        pll c;
+        lint a, b;
+        c = pii(a, b); // pii to pll, a, b changed
+    }
 }
 
 
